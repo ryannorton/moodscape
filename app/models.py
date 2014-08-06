@@ -2,7 +2,8 @@ from django.db import models
 
 class Tweet(models.Model):
 	text = models.CharField(max_length=150)
-	location = models.CharField(max_length=50)
+	lat = models.FloatField()
+	lon = models.FloatField()
 	user = models.CharField(max_length=50)
 	date = models.DateTimeField()
 	sentiment = models.DecimalField(max_digits=4, decimal_places=1, null=True)
