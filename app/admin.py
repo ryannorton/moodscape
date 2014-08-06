@@ -1,3 +1,8 @@
 from django.contrib import admin
+from app.models import Tweet, State
 
-# Register your models here.
+class StateAdmin(admin.ModelAdmin):
+	ordering = ('name',)
+
+admin.site.register(Tweet)
+admin.site.register(State, StateAdmin)
