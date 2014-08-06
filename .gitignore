@@ -1,2 +1,6 @@
+.gitignore
 .DS_Store
+appkeys.txt
 moodscape.db
+venv/
+requirements.txt
