@@ -4,6 +4,7 @@ import os
 import pytz
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MoodScape.settings')
 from app.models import Tweet
+from textblob import TextBlob
 
 class MyStreamer(TwythonStreamer):
     
@@ -19,7 +20,7 @@ class MyStreamer(TwythonStreamer):
             and data['coordinates'] is not None
         ):
             # view progress in console - used for debugging
-            print self.count, data['coordinates']['coordinates']
+            print self.count, data['coordinates']['coordinates'], data['text']
             
             self.count += 1
             
@@ -29,11 +30,12 @@ class MyStreamer(TwythonStreamer):
                 lat=data['coordinates']['coordinates'][0], 
                 lon=data['coordinates']['coordinates'][1],
                 user='@' + data['user']['screen_name'], 
-                date=datetime.now(tz=pytz.timezone("America/Denver"))
+                date=datetime.now(tz=pytz.timezone("America/Denver")),
+                sentiment=TextBlob(data['text']).sentiment.polarity
             )
 
             # collect n number of tweets - used for testing
-            if self.count >= 100:	
+            if self.count >= 300000:	
             	self.disconnect()
 
     def on_error(self, status_code, data):
@@ -53,8 +55,8 @@ def main():
     # initialize Twitter's public streaming API
     stream = MyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     
-    # only include tweets with location data
-    stream.statuses.filter(locations='-180,-90,180,90')
+    # only include tweets within Continental USA
+    stream.statuses.filter(locations='-124.848974,24.396308,-66.885444, 49.384358')
 
 main()
 
