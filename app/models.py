@@ -7,6 +7,7 @@ class Tweet(models.Model):
 	user = models.CharField(max_length=50)
 	date = models.DateTimeField()
 	sentiment = models.DecimalField(max_digits=4, decimal_places=1, null=True)
+	url = models.CharField(max_length=200)
 	
 	def __unicode__(self):
 		return self.text
